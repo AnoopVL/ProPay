@@ -52,7 +52,23 @@ contract payProj {
         if (names[msg.sender].hasName) {
             newRequest.name = names[msg.sender].name;
         }
+        requests[user].push(newRequest);
     }
+
     // 5. Fullfill requests
+    function payRequest(uint256 _request) public payable {
+        require(
+            _request < requests[msg.sender].length,
+            "No such request exists!!"
+        );
+        request[] storage myRequests = requests[msg.sender];
+        request storage payableRequest = myRequests[_request];
+
+        uint256 toPay = payableRequest.amount * 1000000000000000000;
+        require(msg.value == (toPay), "Please pay the exact amount!!");
+        payable(payableRequest.requestor).transfer(msg.value);
+        myRequests[_request] = myRequests[myRequests.length - 1];
+        myRequests.pop();
+    }
     // 6. Display all the previous requests
 }
