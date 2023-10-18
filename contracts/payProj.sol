@@ -65,7 +65,15 @@ contract payProj {
 
         uint256 toPay = payableRequest.amount * 1000000000000000000;
         require(msg.value == (toPay), "Please pay the exact amount!!");
+
         payable(payableRequest.requestor).transfer(msg.value);
+        addHistory(
+            msg.sender,
+            payableRequest.requestor,
+            payableRequest.amount,
+            payableRequest.message
+        );
+
         myRequests[_request] = myRequests[myRequests.length - 1];
         myRequests.pop();
     }
@@ -96,5 +104,33 @@ contract payProj {
         }
         history[receiver].push(newReceive);
     }
+
     // 6. Display all the previous requests
+    function getMyRequests(
+        address _users
+    )
+        public
+        view
+        returns (
+            address[] memory,
+            uint256[] memory,
+            string[] memory,
+            string[] memory
+        )
+    {
+        address[] memory addrs = new address[](requests[_users].length);
+        uint256[] memory amnt = new uint256[](requests[_users].length);
+        string[] memory msge = new string[](requests[_users].length);
+        string[] memory nme = new string[](requests[_users].length);
+
+        for (uint i = 0; i < requests[_users].length; i++) {
+            request storage myRequests = requests[_users][i];
+            addrs[i] = myRequests.requestor;
+            amnt[i] = myRequests.amount;
+            msge[i] = myRequests.message;
+            nme[i] = myRequests.name;
+        }
+
+        return (addrs, amnt, msge, nme);
+    }
 }
