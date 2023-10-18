@@ -16,20 +16,20 @@ contract payProj {
         string message;
         string name;
     }
-    struct sendRecieve {
+    struct sendReceive {
         string action;
         uint256 amount;
         string message;
         address otherPartyAddress;
-        string otherPartName;
+        string otherPartyName;
     }
     struct userName {
         string name;
         bool hasName;
     }
-    mapping(address => userName) names;
     mapping(address => request[]) requests;
-    mapping(address => sendRecieve[]) history;
+    mapping(address => sendReceive[]) history;
+    mapping(address => userName) names;
 
     // 3. Add name to the wallet
     function addUser(string memory _name) public {
@@ -39,7 +39,6 @@ contract payProj {
     }
 
     // 4. Add requests
-
     function createRequest(
         address user,
         uint256 _amount,
@@ -69,6 +68,33 @@ contract payProj {
         payable(payableRequest.requestor).transfer(msg.value);
         myRequests[_request] = myRequests[myRequests.length - 1];
         myRequests.pop();
+    }
+
+    function addHistory(
+        address sender,
+        address receiver,
+        uint256 _amount,
+        string memory _message
+    ) private {
+        sendReceive memory newSend;
+        newSend.action = "-";
+        newSend.amount = _amount;
+        newSend.message = _message;
+        newSend.otherPartyAddress = receiver;
+        if (names[receiver].hasName) {
+            newSend.otherPartyName = names[receiver].name;
+        }
+        history[sender].push(newSend);
+
+        sendReceive memory newReceive;
+        newReceive.action = "+";
+        newReceive.amount = _amount;
+        newReceive.message = _message;
+        newReceive.otherPartyAddress = sender;
+        if (names[sender].hasName) {
+            newReceive.otherPartyName = names[sender].name;
+        }
+        history[receiver].push(newReceive);
     }
     // 6. Display all the previous requests
 }
