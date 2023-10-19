@@ -130,7 +130,17 @@ contract payProj {
             msge[i] = myRequests.message;
             nme[i] = myRequests.name;
         }
-
         return (addrs, amnt, msge, nme);
+    }
+
+    //get all the previous transactions user has been part of
+    function getMyHistory(
+        address _user
+    ) public view returns (sendReceive[] memory) {
+        return history[_user];
+    }
+
+    function getMyName(address _user) public view returns (userName memory) {
+        return names[_user];
     }
 }
