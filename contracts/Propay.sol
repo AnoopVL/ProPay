@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: UNLICENSED
 pragma solidity ^0.8.9;
 
-contract payProj {
+contract Propay {
     // 1. Declare the owner of the contract
     address public owner;
 
