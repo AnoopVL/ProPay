@@ -5,7 +5,7 @@ async function main() {
   const propay = await Propay.deploy();
 
   await propay.deployed();
-  console.log("Propay is deployed to: ", paypal.address);
+  console.log("Propay is deployed to: ", propay.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
