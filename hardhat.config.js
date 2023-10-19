@@ -7,13 +7,13 @@ dotenv.config();
 /** @type import('hardhat/config').HardhatUserConfig */
 module.exports = {
   solidity: "0.8.19",
-  networks:{
-    mumbai:{
-      url: ,
-      accounts: []
-    }
+  networks: {
+    mumbai: {
+      url: process.env.POLYGON_MUMBAI_RPC,
+      accounts: [process.env.PRIVATE_KEY],
+    },
   },
-  etherscan:{
-    apiKey: ,
-  }
+  etherscan: {
+    apiKey: process.env.API_KEY,
+  },
 };
